@@ -1,0 +1,40 @@
+type AdvertisementCPMs {
+  advertisementId: ID!
+  Rate: Float!
+  channelShare: Float!
+  providerShare: Float!
+  totalBudget: Float!
+  maxLifeCycle: Int!
+  requiredViews: Int!
+}
+
+input createAdvertisementCPMInput {
+  advertisementId: ID!
+  Rate: Float!
+  channelShare: Float!
+  providerShare: Float!
+  totalBudget: Float!
+  maxLifeCycle: Int!
+  requiredViews: Int!
+}
+input updateAdvertisementCPMInput {
+  advertisementId: ID!
+  Rate: Float
+  channelShare: Float
+  providerShare: Float
+  totalBudget: Float
+  maxLifeCycle: Int
+  requiredViews: Int
+}
+
+extend type Query {
+  advertisementCPMById(id: ID!): AdvertisementCPMs!
+}
+extend type Mutation {
+  createAdvertisementCPM(
+    input: createAdvertisementCPMInput!
+  ): AdvertisementCPMs!
+  updateAdvertisementCPM(
+    input: updateAdvertisementCPMInput!
+  ): AdvertisementCPMs!
+}

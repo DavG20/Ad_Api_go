@@ -1,0 +1,44 @@
+type ChannelDetails {
+  channelId: ID!
+  subCount: Int
+  averagePostView: Int
+  postToSubRatio: Float
+  PostFrequency: Float
+  lastPostId: String
+  lastPost: Timestamp
+  collectedDate: Timestamp
+  createdAt: Timestamp
+  updatedAt: Timestamp
+  deletedAt: Timestamp
+}
+input createChannelDetailInput {
+  channelId: ID!
+  subCount: Int
+  averagePostView: Int
+  postToSubRatio: Float
+  PostFrequency: Float
+  lastPostId: String
+  lastPost: Timestamp
+  collectedDate: Timestamp
+}
+input updateChannelDetailInput {
+  channelId: ID!
+  subCount: Int
+  averagePostView: Int
+  postToSubRatio: Float
+  PostFrequency: Float
+  lastPostId: String
+  lastPost: Timestamp
+  collectedDate: Timestamp
+}
+input channelDetailFilter {
+  filter: FilterInput
+}
+extend type Query {
+  getAllChannelDetails(channelDetailFilter: channelDetailFilter): [ChannelDetails!]!
+  channelDetailById(channelId: ID!): ChannelDetails!
+}
+extend type Mutation {
+  createChannelDetail(input: createChannelDetailInput!): ChannelDetails!
+  updateChannelDetail(input: updateChannelDetailInput!): ChannelDetails!
+}

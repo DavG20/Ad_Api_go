@@ -1,0 +1,32 @@
+type HourlyRates {
+  id: String!
+  channelId: String!
+  active: Boolean
+  hourlyRate: Float
+  minHourlyVolume: Float
+  maxHourlyVolume: Float
+  createdAt: Timestamp
+  removeAt: Timestamp
+}
+
+input createHourlyRateInput {
+  channelId: String!
+  active: Boolean
+  hourlyRate: Float
+  minHourlyVolume: Float
+  maxHourlyVolume: Float
+}
+input updateHourlyRateInput {
+  id: ID!
+  active: Boolean
+  hourlyRate: Float
+  minHourlyVolume: Float
+  maxHourlyVolume: Float
+}
+extend type Query {
+  HourlyRateById(id: ID!): HourlyRates!
+}
+extend type Mutation {
+  createHourlyRate(input: createHourlyRateInput!): HourlyRates!
+  updateHourlyRate(input: updateHourlyRateInput!): HourlyRates!
+}

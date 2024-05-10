@@ -1,0 +1,20 @@
+type Categories {
+  category: String!
+}
+
+input createCategoryInput {
+  category: String!
+}
+
+input categoryFilter {
+  filter: FilterInput
+}
+
+extend type Query {
+  categoryById(id: ID!): Categories!
+  getAllCategories(categoryFilter: categoryFilter): [Categories!]!
+}
+
+extend type Mutation {
+  createCategory(input: createCategoryInput!): Categories!
+}

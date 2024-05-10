@@ -1,0 +1,38 @@
+type ChannelLifeTimeBalances {
+  id: ID!
+  accountId: ID!
+  channelId: ID!
+  totalAmount: Float!
+  currency: String
+  totalHour: Float!
+  totalAd: Float!
+  createdAt: Timestamp
+  updatedAt: Timestamp
+  deletedAt: Timestamp
+}
+input createChannelLifeTimeBalanceInput {
+  accountId: ID!
+  channelId: ID!
+  totalAmount: Float!
+  currency: String
+  totalHour: Float!
+  totalAd: Float!
+}
+input updateChannelLifeTimeBalanceInput {
+  id: ID!
+  totalAmount: Float
+  currency: String
+  totalHour: Float
+  totalAd: Float
+}
+extend type Query {
+  channelLifeTimeBalanceById(channelId: ID!): ChannelLifeTimeBalances!
+}
+extend type Mutation {
+  createChannelLifeTimeBalance(
+    input: createChannelLifeTimeBalanceInput!
+  ): ChannelLifeTimeBalances!
+  updateChannelLifeTimeBalance(
+    input: updateChannelLifeTimeBalanceInput!
+  ): ChannelLifeTimeBalances!
+}

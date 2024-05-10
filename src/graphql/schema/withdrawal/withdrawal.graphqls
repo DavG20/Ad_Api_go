@@ -1,0 +1,65 @@
+type Withdrawals {
+  id: ID!
+  accountId: ID!
+  accountBankId: ID!
+  totalAmount: Float!
+  currency: String
+  fundingKey: String
+  method: String
+  reference: String
+  paymentDate: Timestamp
+  status: Status
+  extra: Any
+  log: Any
+  createdAt: Timestamp
+  updatedAt: Timestamp
+  deletedAt: Timestamp
+}
+input createWithdrawalInput {
+  accountId: ID!
+  accountBankId: ID!
+  totalAmount: Float!
+  currency: String
+  fundingKey: String
+  method: String
+  reference: String
+  paymentDate: Timestamp
+  status: Status
+  extra: Any
+  log: Any
+}
+
+input updateWithdrawalInput {
+  id: ID!
+  totalAmount: Float
+  currency: String
+  fundingKey: String
+  method: String
+  reference: String
+  paymentDate: Timestamp
+  status: Status
+  extra: Any
+  log: Any
+}
+input withdrawalFilter {
+  accountId: ID
+  accountBankId: ID
+  status: [Status!]
+  totalAmount: minMaxFilterInput
+  currency: String
+  filter: FilterInput
+}
+enum Status {
+  Processing
+  Successful
+  Failed
+}
+extend type Query {
+  withdrawalById(id: ID!): Withdrawals!
+  getAllWithdrawals(withdrawalFilter: withdrawalFilter): [Withdrawals!]!
+}
+
+extend type Mutation {
+  createWithdrawal(input: createWithdrawalInput!): Withdrawals!
+  updateWithdrawal(input: updateWithdrawalInput!): Withdrawals!
+}

@@ -1,0 +1,47 @@
+type Advertisements {
+  id: ID!
+  campaignId: ID!
+  contentId: ID!
+  channelId: ID!
+  messageId: Int
+  status: AdStatus
+  createdAt: Timestamp
+  updatedAt: Timestamp
+  deletedAt: Timestamp
+}
+input createAdvertisementInput {
+  campaignId: ID!
+  contentId: ID!
+  channelId: ID!
+  messageId: Int
+  status: AdStatus
+}
+input updateAdvertisementInput {
+  id: ID!
+  status: AdStatus
+}
+enum AdStatus {
+  Pending
+  Running
+  Closed
+  Rejected
+}
+input advertisementFilter {
+  channelId: ID
+  companyId: ID
+  status: [AdStatus!]
+  rate: minMaxFilterInput
+  channelBudgetShare: minMaxFilterInput
+  requiredViews: minMaxFilterInput
+  Views: minMaxFilterInput
+  Hours: minMaxFilterInput
+  filter: FilterInput
+}
+extend type Query {
+  advertisementById(id: ID!): Advertisements!
+  getAllAdvertisements(advertisementFilter: advertisementFilter): [Advertisements!]!
+}
+extend type Mutation {
+  createAdvertisement(input: createAdvertisementInput!): Advertisements!
+  updateAdvertisement(input: updateAdvertisementInput!): Advertisements!
+}

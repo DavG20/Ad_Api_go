@@ -1,0 +1,31 @@
+type ChannelCollectedAdLinks {
+  channelBalanceId: ID!
+  adPaymentId: ID!
+}
+
+input channelCollectedAdLinkInput {
+  channelBalanceId: ID!
+  adPaymentId: ID!
+}
+input channelCollectedAdLinkFilter {
+  channelBalanceId: ID
+  filter: FilterInput
+}
+
+extend type Query {
+  channelCollectedAdLinkById(adPaymentId: ID!): ChannelCollectedAdLinks!
+  channelCollectedAdLink(
+    channelCollectedAdLinkInput: channelCollectedAdLinkInput
+  ): ChannelCollectedAdLinks!
+  getAllChannelCollectedAdLinks(
+    channelCollectedAdLinkFilter: channelCollectedAdLinkFilter
+  ): [ChannelCollectedAdLinks!]!
+}
+extend type Mutation {
+  createChannelCollectedAdLink(
+    input: channelCollectedAdLinkInput!
+  ): ChannelCollectedAdLinks!
+  deleteChannelCollectedAdLink(
+    channelCollectedAdLinkInput: channelCollectedAdLinkInput
+  ): DeletionResult!
+}

@@ -1,0 +1,28 @@
+type Budgets {
+  campaignId: ID!
+  initialAmount: Float!
+  usedAmount: Float
+  refundedAmount: Float
+  currency: String
+}
+input createBudgetInput {
+  campaignId: ID!
+  initialAmount: Float!
+  usedAmount: Float
+  refundedAmount: Float
+  currency: String
+}
+input updateBudgetInput {
+  campaignId: ID!
+  initialAmount: Float
+  usedAmount: Float
+  refundedAmount: Float
+  currency: String
+}
+extend type Query {
+  budgetById(id: ID!): Budgets!
+}
+extend type Mutation {
+  createBudget(input: createBudgetInput!): Budgets!
+  updateBudget(input: updateBudgetInput!): Budgets!
+}

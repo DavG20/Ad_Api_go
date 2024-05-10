@@ -1,0 +1,35 @@
+type CompanyMembers {
+  id: ID!
+  accountId: ID!
+  companyId: ID!
+  role: CompanyRole
+  createdAt: Timestamp
+  updatedAt: Timestamp
+}
+input createCompanyMemberInput {
+  accountId: ID!
+  companyId: ID!
+  role: CompanyRole
+}
+input updateCompanyMemberInput {
+  id: ID!
+  role: CompanyRole
+}
+input companyMemberFilter {
+  companyId: ID
+  accountId: ID
+  role: [CompanyRole!]
+  filter: FilterInput
+}
+enum CompanyRole {
+  Admin
+  Member
+}
+extend type Query {
+  companyMemberById(id: ID!): CompanyMembers!
+  getAllCompanyMembers(companyMemberFilter: companyMemberFilter): [CompanyMembers!]!
+}
+extend type Mutation {
+  createCompanyMember(input: createCompanyMemberInput!): CompanyMembers!
+  updateCompanyMember(input: updateCompanyMemberInput!): CompanyMembers!
+}

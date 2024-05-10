@@ -1,0 +1,15 @@
+type CompanyLocations {
+  companyId: ID!
+  locationId: ID!
+}
+input createCompanyLocationInput {
+  companyId: ID!
+  locationId: ID!
+}
+extend type Query {
+  companyLocationById(companyId: ID!, locationId: ID!): CompanyLocations!
+}
+extend type Mutation {
+  createCompanyLocation(input: createCompanyLocationInput!): CompanyLocations!
+  deleteCompanyLocation(companyId: ID!, locationId: ID!): DeletionResult!
+}

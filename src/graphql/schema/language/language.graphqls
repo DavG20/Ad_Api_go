@@ -1,0 +1,18 @@
+type Languages {
+  language: ID!
+}
+input createLanguageInput {
+  language: String!
+}
+
+input languageFilter {
+  filter: FilterInput
+}
+extend type Query {
+  languageById(id: ID!): Languages!
+  getAllLanguages(languageFilter: languageFilter): [Languages!]!
+}
+
+extend type Mutation {
+  createLanguage(input: createLanguageInput!): Languages!
+}

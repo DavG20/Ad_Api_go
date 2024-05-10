@@ -1,0 +1,30 @@
+type cpmRates {
+  id: ID!
+  channelId: ID!
+  active: Boolean
+  CPM: Float
+  minCPMVolume: Float
+  createdAt: Timestamp
+  updatedAt: Timestamp
+}
+
+input createCPMRateInput {
+  channelId: ID!
+  active: Boolean
+  CPM: Float
+  minCPMVolume: Float
+}
+input updateCPMRateInput {
+  channelId: ID!
+  active: Boolean
+  CPM: Float
+  minCPMVolume: Float
+}
+
+extend type Query {
+  cpmRateByChannelId(channelId: ID!): cpmRates!
+}
+extend type Mutation {
+  createCPMRate(input: createCPMRateInput!): cpmRates!
+  updateCPMRate(input: updateCPMRateInput!): cpmRates!
+}

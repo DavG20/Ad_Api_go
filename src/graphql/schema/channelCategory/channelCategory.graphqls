@@ -1,0 +1,25 @@
+type ChannelCategories {
+  id: ID!
+  channelId: String
+  category: String
+}
+input channelCategoryInput {
+  channelId: String!
+  category: String!
+}
+input channelCategoryFilter {
+  channelId: String
+  category: String
+  filter: FilterInput
+}
+extend type Query {
+  getAllChannelCategories(
+    channelCategoryFilter: channelCategoryFilter
+  ): [ChannelCategories!]!
+}
+extend type Mutation {
+  createChannelCategory(input: channelCategoryInput!): ChannelCategories!
+  deleteChannelCategory(
+    channelCategoryInput: channelCategoryInput
+  ): DeletionResult!
+}

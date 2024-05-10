@@ -1,0 +1,114 @@
+datasource db {
+    provider = "postgresql"
+    url      = env("TRANSACTION_DATABASE_URL")
+}
+
+generator db {
+    provider = "go run github.com/steebchen/prisma-client-go"
+}
+
+model funding {
+    id           String        @id @default(cuid())
+    companyId    String
+    amount       Float
+    currency     String        @default("ETB")
+    key          String
+    method       String?
+    fundingTxRef String?
+    reference    String?
+    paymentDate  DateTime?
+    redirectUrl  String?
+    status       FundingStatus @default(Processing)
+    extra        Bytes?
+    log          Bytes?
+    tax          String
+    createdAt    DateTime      @default(now())
+    updatedAt    DateTime      @default(now()) @updatedAt
+    deletedAt    DateTime?
+}
+
+enum FundingStatus {
+    Processing
+    Successful
+    Failed
+}
+
+model channelLifeTimeBalances {
+    id          String    @id @default(cuid())
+    accountId   String
+    channelId   String    @unique
+    totalAmount Float
+    currency    String    @default("ETB")
+    totalHour   Float
+    totalAd     Float
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @default(now()) @updatedAt
+    deletedAt   DateTime?
+}
+
+model channelBalances {
+    id                     String                    @id @default(cuid())
+    accountId              String
+    channelId              String                    @unique
+    amount                 Float                     @default(0)
+    currency               String                    @default("ETB")
+    createdAt              DateTime                  @default(now()) @updatedAt
+    updatedAt              DateTime                  @updatedAt
+    deletedAt              DateTime?
+    channelCollectedAdLink channelCollectedAdLinks[]
+    withdrawalChannelLinks withdrawalChannelLinks[]
+}
+
+model adPayments {
+    id                      String                   @id @default(cuid())
+    advertisementId         String                   @unique
+    accountId               String
+    campaignId              String
+    channelId               String
+    amount                  Float                    @default(0)
+    currency                String                   @default("ETB")
+    completionTime          DateTime                 @default(now())
+    createdAt               DateTime                 @default(now())
+    updatedAt               DateTime                 @default(now()) @updatedAt
+    deletedAt               DateTime?
+    channelCollectedAdLinks channelCollectedAdLinks?
+}
+
+model channelCollectedAdLinks {
+    channelBalanceId String
+    adPaymentId      String @unique
+
+    channelBalance channelBalances @relation(fields: [channelBalanceId], references: [id])
+    adPayment      adPayments      @relation(fields: [adPaymentId], references: [id])
+
+    @@id([channelBalanceId, adPaymentId], name: "ID")
+}
+
+model withdrawals {
+    id                     String                  @id @default(cuid())
+    accountId              String
+    accountBankId          String
+    totalAmount            Float
+    currency               String                  @default("ETB")
+    fundingKey             String?
+    method                 String?
+    reference              String?
+    paymentDate            DateTime?
+    status                 FundingStatus           @default(Processing)
+    extra                  Bytes?
+    log                    Bytes?
+    createdAt              DateTime                @default(now())
+    updatedAt              DateTime                @default(now()) @updatedAt
+    deletedAt              DateTime?
+    withdrawalChannelLinks withdrawalChannelLinks?
+}
+
+model withdrawalChannelLinks {
+    withdrawalId     String @unique
+    channelBalanceId String
+
+    withdrawal     withdrawals     @relation(fields: [withdrawalId], references: [id])
+    channelBalance channelBalances @relation(fields: [channelBalanceId], references: [id])
+
+    @@id([withdrawalId, channelBalanceId], name: "ID")
+}

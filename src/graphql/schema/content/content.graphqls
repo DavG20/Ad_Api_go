@@ -1,0 +1,32 @@
+type Contents {
+  id: ID!
+  campaignId: ID!
+  contentType: ContentType
+  description: String
+  createdAt: Timestamp
+  updatedAt: Timestamp
+  deletedAt: Timestamp
+}
+
+enum ContentType {
+  ImageMediaGroup
+  JustText
+}
+input createContentInput {
+  campaignId: ID!
+  contentType: ContentType
+  description: String
+}
+
+input updateContentInput {
+  id: ID!
+  contentType: ContentType
+  description: String
+}
+extend type Query {
+  contentById(id: ID!): Contents!
+}
+extend type Mutation {
+  createContent(input: createContentInput!): Contents!
+  updateContent(input: updateContentInput!): Contents!
+}

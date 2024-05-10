@@ -1,0 +1,35 @@
+type AccountBanking {
+  id: ID!
+  accountId: ID!
+  bankId: ID!
+  fullNameOnBank: String!
+  bankAccount: String!
+  currency: String!
+  createdAt: Timestamp
+  updatedAt: Timestamp
+  deletedAt: Timestamp
+}
+
+input createAccountBankingInput {
+  accountId: ID!
+  bankId: ID!
+  fullNameOnBank: String!
+  bankAccount: String!
+  currency: String!
+}
+
+input accountBankingsFilter {
+  filter: FilterInput
+  accountId: String
+  bankId: String
+}
+extend type Query {
+  accountBankingById(id: ID!): AccountBanking!
+  getAllAccountBankings(
+    accountBankingsFilter: accountBankingsFilter!
+  ): [AccountBanking!]!
+}
+extend type Mutation {
+  createAccountBanking(input: createAccountBankingInput!): AccountBanking!
+  deleteAccountBanking(id: ID!): DeletionResult!
+}

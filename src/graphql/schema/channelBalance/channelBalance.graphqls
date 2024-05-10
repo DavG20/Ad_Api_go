@@ -1,0 +1,28 @@
+type ChannelBalances {
+  id: ID!
+  accountId: ID!
+  channelId: ID!
+  amount: Float
+  currency: String
+  createdAt: Timestamp
+  updatedAt: Timestamp
+  deletedAt: Timestamp
+}
+input createChannelBalanceInput {
+  accountId: ID!
+  channelId: ID!
+  amount: Float
+  currency: String
+}
+input updateChannelBalanceInput {
+  id: ID!
+  amount: Float
+  currency: String
+}
+extend type Query {
+  channelBalanceById(channelId: ID!): ChannelBalances!
+}
+extend type Mutation {
+  createChannelBalance(input: createChannelBalanceInput!): ChannelBalances!
+  updateChannelBalance(input: updateChannelBalanceInput!): ChannelBalances!
+}

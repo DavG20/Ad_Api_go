@@ -1,0 +1,1 @@
+{"name":"Local: GenerateBulkInsertQuery","url":"/home/dave/DavG/AdTec/backend/src/utils/GenerateBulkInsertQuery.go","tests":[{"id":1704374147697,"input":"","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/home/dave/DavG/AdTec/backend/src/utils/GenerateBulkInsertQuery.go","group":"local","local":true}

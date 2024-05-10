@@ -1,0 +1,128 @@
+datasource db {
+    provider = "postgresql"
+    url      = env("PROFILE_DATABASE_URL")
+}
+
+generator db {
+    provider = "go run github.com/steebchen/prisma-client-go"
+}
+
+model accounts {
+    id              String            @id @default(cuid())
+    userId          String            @unique
+    userName        String            @unique
+    email           String?           @unique
+    phoneNumber     String?           @unique
+    fullName        String?
+    birthDate       DateTime?
+    accountType     AccountType       @default(Publisher) // since it is not optional lets give it a default 
+    createdAt       DateTime          @default(now())
+    updatedAt       DateTime          @default(now()) @updatedAt
+    companyMembers  companyMembers[]
+    accountBankings accountBankings[]
+}
+
+enum AccountType {
+    Publisher
+    Advertiser
+}
+
+model accountBankings {
+    id             String    @id @default(cuid())
+    accountId      String
+    bankId         String
+    bank           banks     @relation(fields: [bankId], references: [id])
+    fullNameOnBank String
+    bankAccount    String
+    currency       String
+    createdAt      DateTime  @default(now())
+    updatedAt      DateTime  @default(now()) @updatedAt
+    deletedAt      DateTime?
+
+    account accounts @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+    @@unique([bankAccount, bankId], name: "UniqueBankAccountAndId")
+}
+
+model companyBankings {
+    id             String    @id @default(cuid())
+    companyId      String
+    bankId         String
+    fullNameOnBank String
+    bankAccount    String
+    currency       String?
+    createdAt      DateTime  @default(now())
+    updatedAt      DateTime  @default(now()) @updatedAt
+    deletedAt      DateTime?
+
+    bank    banks     @relation(fields: [bankId], references: [id], onDelete: Cascade)
+    company companies @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+    @@unique([bankAccount, bankId], name: "UniqueBankAccountAndId")
+}
+
+model banks {
+    id              String            @id @default(cuid())
+    bankName        String            @unique
+    bankCode        String            @unique
+    createdAt       DateTime          @default(now())
+    updatedAt       DateTime          @default(now()) @updatedAt
+    deletedAt       DateTime?
+    companyBankings companyBankings[]
+    accountBankings accountBankings[]
+}
+
+model locations {
+    id               String             @id @default(cuid())
+    country          String
+    address          String?
+    state            String
+    city             String
+    postalCode       String?
+    createdAt        DateTime           @default(now())
+    updatedAt        DateTime           @default(now()) @updatedAt
+    deletedAt        DateTime?
+    companyLocations companyLocations[]
+}
+
+model companies {
+    id               String             @id @default(cuid())
+    creatorId        String
+    name             String
+    uniqueName       String             @unique
+    tinNumber        String?
+    vatNumber        String?
+    createdAt        DateTime           @default(now())
+    updatedAt        DateTime           @default(now()) @updatedAt
+    companyLocations companyLocations[]
+    companyMembers   companyMembers[]
+    companyBankings  companyBankings[]
+}
+
+model companyLocations {
+    companyId  String
+    locationId String
+    company    companies @relation(fields: [companyId], references: [id], onDelete: Cascade)
+    location   locations @relation(fields: [locationId], references: [id], onDelete: Cascade)
+
+    @@id([companyId, locationId], name: "UniqueCompanyLocationId")
+}
+
+model companyMembers {
+    id        String      @id @default(cuid())
+    accountId String
+    companyId String
+    role      CompanyRole @default(Admin)
+    createdAt DateTime    @default(now())
+    updatedAt DateTime    @default(now()) @updatedAt
+
+    company companies @relation(fields: [companyId], references: [id], onDelete: Cascade)
+    account accounts  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+    @@unique([accountId, companyId], name: "UniqueAccountIdAndCompanyId")
+}
+
+enum CompanyRole {
+    Admin
+    Member
+}

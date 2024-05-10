@@ -1,0 +1,96 @@
+datasource db {
+    provider = "postgresql"
+    url      = env("CHANNEL_DATABASE_URL")
+}
+
+generator db {
+    provider = "go run github.com/steebchen/prisma-client-go"
+}
+
+model channels {
+    id                      String                    @id @default(cuid())
+    ownerId                 String
+    userName                String                    @unique
+    name                    String?
+    description             String?
+    botAddAsAdmin           Boolean                   @default(false)
+    channelCreatedAt        DateTime?
+    country                 String?
+    currency                String?
+    createdAt               DateTime                  @default(now())
+    updatedAt               DateTime                  @default(now()) @updatedAt
+    deletedAt               DateTime?
+    channelCategories       channelCategories[]
+    hourlyRates             hourlyRates[]
+    cpmRates                cpmRates?
+    channelDetails          channelDetails?
+    channelContentLanguages channelContentLanguages[]
+}
+
+model categories {
+    category          String              @id
+    channelCategories channelCategories[]
+}
+
+model channelCategories {
+    channelId String
+    category  String
+
+    categoryData categories @relation(fields: [category], references: [category])
+    channel      channels   @relation(fields: [channelId], references: [id], onDelete: Cascade)
+
+    @@id([channelId, category], name: "channelCategoryId")
+}
+
+model languages {
+    language                String                    @id
+    channelContentLanguages channelContentLanguages[]
+}
+
+model channelContentLanguages {
+    channelId String
+    language  String
+
+    languageData languages @relation(fields: [language], references: [language])
+    channel      channels  @relation(fields: [channelId], references: [id], onDelete: Cascade)
+
+    @@id([channelId, language], name: "channelContentLanguageId")
+}
+
+model hourlyRates {
+    id              String    @id @default(cuid())
+    channelId       String
+    channel         channels  @relation(fields: [channelId], references: [id], onDelete: Cascade)
+    active          Boolean   @default(true)
+    hourlyRate      Float     @default(0)
+    minHourlyVolume Float     @default(0)
+    maxHourlyVolume Float     @default(10)
+    createdAt       DateTime  @default(now())
+    removeAt        DateTime?
+}
+
+model cpmRates {
+    id           String   @id @default(cuid())
+    channelId    String   @unique
+    channel      channels @relation(fields: [channelId], references: [id], onDelete: Cascade)
+    active       Boolean  @default(true)
+    CPM          Float    @default(0)
+    minCPMVolume Float    @default(0)
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @default(now()) @updatedAt
+}
+
+model channelDetails {
+    channelId       String    @id @unique
+    channel         channels  @relation(fields: [channelId], references: [id], onDelete: Cascade)
+    subCount        Int       @default(0)
+    averagePostView Int       @default(0)
+    postToSubRatio  Float     @default(0)
+    PostFrequency   Float     @default(0)
+    lastPostId      String?
+    lastPost        DateTime?
+    collectedDate   DateTime?
+    createdAt       DateTime  @default(now())
+    updatedAt       DateTime  @default(now()) @updatedAt
+    deletedAt       DateTime?
+}

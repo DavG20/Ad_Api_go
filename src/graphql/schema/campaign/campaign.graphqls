@@ -1,0 +1,53 @@
+type Campaigns {
+  id: ID!
+  companyId: ID!
+  name: String!
+  objective: ObjectiveType
+  startDate: Timestamp
+  createdAt: Timestamp
+  updatedAt: Timestamp
+  deletedAt: Timestamp
+}
+enum ObjectiveType {
+  REACH
+  IMPRESSION
+  CLICKS
+}
+input createCampaignInput {
+  companyId: ID!
+  name: String!
+  objective: ObjectiveType
+  startDate: Timestamp
+}
+input updateCampaignInput {
+  id: ID!
+  name: String
+  objective: ObjectiveType
+  startDate: Timestamp
+}
+input campaignFilter {
+  name: String
+  companyId: ID
+  objective: [ObjectiveType!]
+  categories: [String!]
+  languages: [String!]
+  initialBudget: minMaxFilterInput
+  usedAmount: minMaxFilterInput
+  contentType: [ContentType!]
+  advertisementStatus: [AdStatus!]
+  advertisementRate: minMaxFilterInput
+  advertisementRequiredViews: minMaxFilterInput
+  advertisementViews: minMaxFilterInput
+  advertisementHours: minMaxFilterInput
+  filter: FilterInput
+}
+
+extend type Query {
+  campaignById(id: ID!): Campaigns!
+  getAllCampaigns(campaignFilter: campaignFilter): [Campaigns!]!
+}
+extend type Mutation {
+  createCampaign(input: createCampaignInput!): Campaigns!
+  updateCampaign(input: updateCampaignInput!): Campaigns!
+  deleteCampaign(id: ID!): DeletionResult!
+}

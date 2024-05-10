@@ -1,0 +1,35 @@
+type CompanyBankings {
+  id: ID!
+  companyId: ID!
+  bankId: ID!
+  fullNameOnBank: String!
+  bankAccount: String!
+  currency: String!
+  createdAt: Timestamp
+  updatedAt: Timestamp
+  deletedAt: Timestamp
+}
+
+input createCompanyBankingInput {
+  companyId: ID!
+  bankId: ID!
+  fullNameOnBank: String!
+  bankAccount: String!
+  currency: String!
+}
+
+input companyBankingFilter {
+  filter: FilterInput
+  companyId: String
+  bankId: String
+}
+extend type Query {
+  companyBankingById(id: ID!): CompanyBankings!
+  getAllCompanyBankings(
+    companyBankingsFilter: companyBankingFilter!
+  ): [CompanyBankings!]!
+}
+extend type Mutation {
+  createCompanyBanking(input: createCompanyBankingInput!): CompanyBankings!
+  deleteCompanyBanking(id: ID!): DeletionResult!
+}

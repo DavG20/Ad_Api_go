@@ -1,0 +1,48 @@
+type AdvertisementResults {
+  advertisementId: ID!
+  startedAt: Timestamp!
+  budget: Float!
+  providerBudgetShare: Float!
+  channelBudgetShare: Float!
+  totalHour: Int!
+  totalClick: Int!
+  totalViews: Int!
+  totalForward: Int!
+  totalReaction: Int!
+}
+
+input createAdvertisementResultInput {
+  advertisementId: ID!
+  startedAt: Timestamp!
+  budget: Float
+  providerBudgetShare: Float
+  channelBudgetShare: Float
+  totalHour: Int
+  totalClick: Int
+  totalViews: Int
+  totalForward: Int
+  totalReaction: Int
+}
+input updateAdvertisementResultInput {
+  advertisementId: ID!
+  startedAt: Timestamp
+  budget: Float
+  providerBudgetShare: Float
+  channelBudgetShare: Float
+  totalHour: Int
+  totalClick: Int
+  totalViews: Int
+  totalForward: Int
+  totalReaction: Int
+}
+extend type Query {
+  advertisementResultById(id: ID!): AdvertisementResults!
+}
+extend type Mutation {
+  createAdvertisementResult(
+    input: createAdvertisementResultInput!
+  ): AdvertisementResults!
+  updateAdvertisementResult(
+    input: updateAdvertisementResultInput!
+  ): AdvertisementResults!
+}

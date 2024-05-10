@@ -1,0 +1,72 @@
+type Funding {
+  id: ID!
+  companyId: ID!
+  amount: Float!
+  currency: String
+  key: String!
+  method: String
+  fundingTxRef: String
+  reference: String
+  paymentDate: Timestamp
+  redirectUrl: String
+  status: FundingStatus
+  extra: Any
+  log: Any
+  tax: String!
+  createdAt: Timestamp
+  updatedAt: Timestamp
+  deletedAt: Timestamp
+}
+
+input createFundingInput {
+  companyId: ID!
+  amount: Float!
+  currency: String
+  key: String!
+  method: String
+  fundingTxRef: String
+  reference: String
+  paymentDate: Timestamp
+  redirectUrl: String
+  status: FundingStatus
+  extra: Any
+  log: Any
+  tax: String!
+}
+
+input updateFundingInput {
+  id: ID!
+  amount: Float
+  currency: String
+  key: String
+  method: String
+  fundingTxRef: String
+  reference: String
+  paymentDate: Timestamp
+  redirectUrl: String
+  status: FundingStatus
+  extra: Any
+  log: Any
+  tax: String
+}
+input fundingFilter {
+  companyId: ID
+  status: [FundingStatus!]
+  amount: minMaxFilterInput
+  currency: String
+  filter: FilterInput
+}
+enum FundingStatus {
+  Processing
+  Successful
+  Failed
+}
+
+extend type Query {
+  fundingById(id: ID!): Funding!
+  getAllFunding(fundingFilter: fundingFilter): [Funding!]!
+}
+extend type Mutation {
+  createFunding(input: createFundingInput!): Funding!
+  updateFunding(input: updateFundingInput!): Funding!
+}

@@ -1,0 +1,23 @@
+type ContentLinks {
+  contentId: ID!
+  link: String
+  title: String
+}
+input createContentLinkInput {
+  contentId: ID!
+  link: String
+  title: String
+}
+input updateContentLinkInput {
+  contentId: ID!
+  link: String
+  title: String
+}
+
+extend type Query {
+  contentLinkById(id: ID!): ContentLinks!
+}
+extend type Mutation {
+  createContentLink(input: createContentLinkInput!): ContentLinks!
+  updateContentLink(input: updateContentLinkInput!): ContentLinks!
+}

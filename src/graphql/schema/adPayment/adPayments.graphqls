@@ -1,0 +1,45 @@
+type AdPayments {
+  id: ID!
+  advertisementId: ID!
+  accountId: ID!
+  campaignId: ID!
+  channelId: ID!
+  amount: Float
+  currency: String
+  completionTime: Timestamp
+  createdAt: Timestamp
+  updatedAt: Timestamp
+  deletedAt: Timestamp
+}
+input createAdPaymentInput {
+  advertisementId: ID!
+  accountId: ID!
+  campaignId: ID!
+  channelId: ID!
+  amount: Float
+  currency: String
+  completionTime: Timestamp
+}
+input updateAdPaymentInput {
+  id: ID!
+  amount: Float
+  currency: String
+  completionTime: Timestamp
+}
+input adPaymentFilter {
+  advertisementId: ID
+  campaignId: ID
+  channelId: ID
+  amount: minMaxFilterInput
+  currency: String
+  filter: FilterInput
+}
+
+extend type Query {
+  adPaymentById(advertisementId: ID!): AdPayments!
+  getAllAdPayments(adPaymentFilter: adPaymentFilter): [AdPayments!]!
+}
+extend type Mutation {
+  createAdPayment(input: createAdPaymentInput!): AdPayments!
+  updateAdPayment(input: updateAdPaymentInput!): AdPayments!
+}

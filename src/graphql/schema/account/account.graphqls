@@ -1,0 +1,61 @@
+scalar Timestamp
+scalar Time
+scalar Upload
+scalar Json
+scalar Any
+scalar Map
+
+type Account {
+  id: ID!
+  userId: ID!
+  userName: String!
+  email: String
+  phoneNumber: String
+  fullName: String
+  birthDate: Timestamp
+  accountType: AccountType
+  createdAt: Timestamp
+  updatedAt: Timestamp
+}
+enum AccountType {
+  Publisher
+  Advertiser
+}
+input createAccountInput {
+  userId: ID!
+  userName: String!
+  email: String
+  phoneNumber: String
+  fullName: String
+  birthDate: Timestamp
+  accountType: AccountType
+}
+input updateAccountInput {
+  id: ID!
+  userName: String
+  email: String
+  phoneNumber: String
+  fullName: String
+  birthDate: Timestamp
+  accountType: AccountType
+}
+
+input FilterInput {
+  after: String
+  before: String
+  limit: Int
+}
+
+type DeletionResult {
+  success: Boolean!
+  message: String!
+}
+
+type Query {
+  account: Account!
+  accountById(id: ID!): Account!
+}
+type Mutation {
+  createAccount(input: createAccountInput!): Account!
+  updateAccount(input: updateAccountInput!): Account!
+}

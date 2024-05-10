@@ -1,0 +1,27 @@
+type ChannelContentLanguages {
+  id: ID!
+  channelId: String
+  language: String
+}
+input channelContentLanguageInput {
+  channelId: String!
+  language: String!
+}
+input channelContentLanguageFilter {
+  channelId: String
+  language: String
+  filter: FilterInput
+}
+extend type Query {
+  getAllChannelContentLanguages(
+    channelContentLanguageFilter: channelContentLanguageFilter
+  ): [ChannelContentLanguages!]!
+}
+extend type Mutation {
+  createChannelContentLanguage(
+    input: channelContentLanguageInput!
+  ): ChannelContentLanguages!
+  deleteChannelContentLanguage(
+    channelContentLanguageInput: channelContentLanguageInput
+  ): DeletionResult!
+}

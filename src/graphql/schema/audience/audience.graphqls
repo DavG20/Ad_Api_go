@@ -1,0 +1,23 @@
+type Audiences {
+  campaignId: ID!
+  category: String
+  language: String
+}
+
+input createAudienceInput {
+  campaignId: ID!
+  category: String
+  language: String
+}
+input updateAudienceInput {
+  campaignId: ID!
+  category: String
+  language: String
+}
+extend type Query {
+  audienceById(id: ID!): Audiences!
+}
+extend type Mutation {
+  createAudience(input: createAudienceInput!): Audiences!
+  updateAudience(input: updateAudienceInput!): Audiences!
+}

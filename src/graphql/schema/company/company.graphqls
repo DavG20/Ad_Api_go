@@ -1,0 +1,31 @@
+type Companies {
+  id: ID!
+  creatorId: ID!
+  name: String!
+  uniqueName: String!
+  tinNumber: String
+  vatNumber: String
+  createdAt: Timestamp
+  updatedAt: Timestamp
+}
+input createCompanyInput {
+  creatorId: ID!
+  name: String!
+  uniqueName: String!
+  tinNumber: String
+  vatNumber: String
+}
+input updateCompanyInput {
+  id: ID!
+  name: String
+  uniqueName: String
+  tinNumber: String
+  vatNumber: String
+}
+extend type Query {
+  companyById(id: ID!): Companies!
+}
+extend type Mutation {
+  createCompany(input: createCompanyInput!): Companies!
+  updateCompany(input: updateCompanyInput!): Companies!
+}

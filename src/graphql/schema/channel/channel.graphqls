@@ -1,0 +1,66 @@
+type Channels {
+  id: ID!
+  ownerId: ID!
+  userName: String!
+  name: String
+  description: String
+  botAddAsAdmin: Boolean
+  channelCreatedAt: Timestamp
+  country: String
+  currency: String
+  cpmRating: cpmRates
+  categories(filter: FilterInput): [ChannelCategories]
+  languages(filter: FilterInput): [ChannelContentLanguages]
+  channelDetails: ChannelDetails
+  createdAt: Timestamp
+  updatedAt: Timestamp
+  deletedAt: Timestamp
+}
+input createChannelInput {
+  ownerId: ID!
+  userName: String!
+  name: String
+  description: String
+  botAddAsAdmin: Boolean
+  channelCreatedAt: Timestamp
+  country: String
+  currency: String
+  cpmRate: createCPMRateInput
+  categories: [String!]
+  languages: [String!]
+}
+input updateChannelInput {
+  id: ID!
+  ownerId: ID
+  userName: String
+  name: String
+  description: String
+  botAddAsAdmin: Boolean
+  country: String
+  currency: String
+}
+input channelFilter {
+  name: String
+  country: String
+  categories: [String!]
+  languages: [String!]
+  subCount: minMaxFilterInput
+  cpmFilter: minMaxFilterInput
+  postViewFilter: minMaxFilterInput
+  filter: FilterInput
+}
+
+input minMaxFilterInput {
+  min: Float!
+  max: Float
+}
+
+extend type Query {
+  channelById(id: ID!): Channels!
+  getAllChannels(channelFilter: channelFilter): [Channels!]!
+}
+extend type Mutation {
+  createChannel(input: createChannelInput!): Channels!
+  updateChannel(input: updateChannelInput!): Channels!
+  deleteChannel(id: ID!): DeletionResult!
+}

@@ -1,0 +1,30 @@
+type Banks {
+  id: ID!
+  bankName: String!
+  bankCode: String!
+  createdAt: Timestamp
+  updatedAt: Timestamp
+  deletedAt: Timestamp
+}
+
+input createBankInput {
+  bankName: String!
+  bankCode: String!
+}
+input updateBankInput {
+  id: ID!
+  bankName: String
+  bankCode: String
+}
+input bankFilter {
+  filter: FilterInput
+}
+extend type Query {
+  bankById(id: ID!): Banks!
+  getAllBanks(bankFilter: bankFilter!): [Banks!]!
+}
+extend type Mutation {
+  createBank(input: createBankInput!): Banks!
+  updateBank(input: updateBankInput!): Banks!
+  deleteBank(id: ID!): DeletionResult!
+}

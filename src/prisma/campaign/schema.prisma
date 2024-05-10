@@ -1,0 +1,118 @@
+datasource db {
+    provider = "postgresql"
+    url      = env("CAMPAIGN_DATABASE_URL")
+}
+
+generator db {
+    provider = "go run github.com/steebchen/prisma-client-go"
+}
+
+model campaigns {
+    id             String           @id @default(cuid())
+    companyId      String
+    name           String           @unique
+    objective      ObjectiveType?
+    startDate      DateTime?
+    createdAt      DateTime         @default(now())
+    updatedAt      DateTime         @default(now()) @updatedAt
+    deletedAt      DateTime?
+    audiences      audiences?
+    budgets        budgets?
+    contents       contents?
+    advertisements advertisements[]
+}
+
+enum ObjectiveType {
+    Reach
+    Impression
+    Clicks
+}
+
+model audiences {
+    campaignId String    @id @unique
+    category   String?
+    language   String?
+    campaign   campaigns @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+}
+
+model budgets {
+    campaignId     String    @id @unique
+    initialAmount  Float
+    usedAmount     Float     @default(0)
+    refundedAmount Float?
+    currency       String    @default("ETB")
+    campaign       campaigns @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+}
+
+model contents {
+    id             String           @id @default(cuid())
+    campaignId     String           @unique
+    contentType    ContentType?
+    description    String?
+    createdAt      DateTime         @default(now())
+    updatedAt      DateTime         @default(now()) @updatedAt
+    deletedAt      DateTime?
+    campaign       campaigns        @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+    contentLinks   contentLinks?
+    advertisements advertisements[]
+}
+
+enum ContentType {
+    ImageMediaGroup
+    JustText
+}
+
+model contentLinks {
+    contentId String   @id @unique
+    link      String?
+    title     String?
+    content   contents @relation(fields: [contentId], references: [id], onDelete: Cascade)
+}
+
+model advertisements {
+    id                   String                @id @default(cuid())
+    campaignId           String
+    contentId            String
+    channelId            String
+    messageId            Int?
+    status               AdStatus              @default(Pending)
+    createdAt            DateTime              @default(now())
+    updatedAt            DateTime              @default(now()) @updatedAt
+    deletedAt            DateTime?
+    content              contents              @relation(fields: [contentId], references: [id])
+    campaign             campaigns             @relation(fields: [campaignId], references: [id])
+    advertisementCPMs    advertisementCPMs?
+    advertisementResults advertisementResults?
+}
+
+enum AdStatus {
+    Pending
+    Running
+    Closed
+    Rejected
+}
+
+model advertisementCPMs {
+    advertisementId String         @id @unique
+    Rate            Float
+    channelShare    Float
+    providerShare   Float
+    totalBudget     Float
+    maxLifeCycle    Int
+    requiredViews   Int
+    advertisement   advertisements @relation(fields: [advertisementId], references: [id], onDelete: Cascade)
+}
+
+model advertisementResults {
+    advertisementId     String         @id @unique
+    startedAt           DateTime
+    budget              Float          @default(0)
+    providerBudgetShare Float          @default(0)
+    channelBudgetShare  Float          @default(0)
+    totalHour           Int            @default(0)
+    totalClick          Int            @default(0)
+    totalViews          Int            @default(0)
+    totalForward        Int            @default(0)
+    totalReaction       Int            @default(0)
+    advertisement       advertisements @relation(fields: [advertisementId], references: [id], onDelete: Cascade)
+}

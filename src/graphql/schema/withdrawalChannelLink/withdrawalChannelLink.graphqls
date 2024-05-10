@@ -1,0 +1,33 @@
+type WithdrawalChannelLinks {
+  withdrawalId: ID!
+  channelBalanceId: ID!
+}
+
+input WithdrawalChannelLinkInput {
+  withdrawalId: ID!
+  channelBalanceId: ID!
+}
+
+input WithdrawalChannelLinkFilter {
+  channelBalanceId: ID
+  filter: FilterInput
+}
+
+extend type Query {
+  withdrawalChannelLinkById(withdrawalId: ID!): WithdrawalChannelLinks!
+  withdrawalChannelLink(
+    withdrawalChannelLinkInput: WithdrawalChannelLinkInput
+  ): WithdrawalChannelLinks!
+  getAllWithdrawalChannelLinks(
+    withdrawalChannelLinkFilter: WithdrawalChannelLinkFilter
+  ): [WithdrawalChannelLinks!]!
+}
+
+extend type Mutation {
+  createWithdrawalChannelLink(
+    input: WithdrawalChannelLinkInput!
+  ): WithdrawalChannelLinks!
+  deleteWithdrawalChannelLink(
+    withdrawalChannelLinkInput: WithdrawalChannelLinkInput
+  ): DeletionResult!
+}

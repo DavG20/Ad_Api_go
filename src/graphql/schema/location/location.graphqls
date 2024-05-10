@@ -1,0 +1,33 @@
+type Locations {
+  id: ID!
+  country: String!
+  state: String!
+  city: String!
+  address: String
+  postalCode: String
+  createdAt: Timestamp
+  updatedAt: Timestamp
+  deletedAt: Timestamp
+}
+input createLocationInput {
+  country: String!
+  state: String!
+  city: String!
+  address: String
+  postalCode: String
+}
+input updateLocationInput {
+  id: ID!
+  country: String
+  state: String
+  city: String
+  address: String
+  postalCode: String
+}
+extend type Query {
+  locationById(id: ID!): Locations!
+}
+extend type Mutation {
+  createLocation(input: createLocationInput!): Locations!
+  updateLocation(input: updateLocationInput!): Locations!
+}
